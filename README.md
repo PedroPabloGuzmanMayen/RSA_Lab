@@ -23,7 +23,7 @@ El algoritmo RSA es computacionalmente pesado y necesitamos cifrar documentos co
 La implementación de la generación de llaves se realizó en el archivo [generar_claves.py](src/generar_claves.py). 
 Este es el código de la función de python que se utilizó para generar llaves RSA:
 
-´´´python
+```python
 
 def generar_par_claves(bits: int = 3072, 
                        pwd: str= '', 
@@ -59,13 +59,13 @@ def generar_par_claves(bits: int = 3072,
 
     return private_key, public_key
 
-´´´
+```
 
 Esta función genera llaves públicas y privadas en formato .pem. Esta clase de archivos tiene la siguiente estructura:
 
 - Serializa la información de la llave en formato *ASN1*, aquí guarda toda la información necesaria para la llave como los valores de *p* y *q*, el valor de *N*, etc
 
-´´´bash
+```bash
 RSAPrivateKey ::= SEQUENCE {
       version   Version,
       modulus   INTEGER,  -- n
@@ -78,7 +78,7 @@ RSAPrivateKey ::= SEQUENCE {
       coefficient   INTEGER,  -- (inverse of q) mod p
       otherPrimeInfos   OtherPrimeInfos OPTIONAL
     }
-´´´
+```
 
 - Luego usa el formato DER para codificar el contenido serializado en binario
 
