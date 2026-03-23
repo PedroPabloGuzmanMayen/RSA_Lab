@@ -34,7 +34,6 @@ def generar_par_claves(bits: int = 3072,
 
     return private_key, public_key
 
-
 if __name__ == '__main__':
 
     private, public = generar_par_claves(3072, 'lab04uvg', 'keys/private1.pem', 'keys/public1.pem')

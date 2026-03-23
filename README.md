@@ -91,6 +91,10 @@ RSAPrivateKey ::= SEQUENCE {
 En las imágenes se puede ver el contenido de las llaves generadas en base 64, vemos que hay encabezados en donde se indica en dónde empieza y finaliza el contenido de la llave. En el encabezado de la llave privada también vemos información extra la cuál nos indica que la llave está cifrada con una clave (un *passphrase*) y que algoritmo se usó para cifrar la llave RSA con el passphrase. 
 
 
+## Ejercicio 2
+
+
+
 ## Referencias
 
 1. Chandra, Y. S. (2023, agosto 26). Anatomy of a PEM file. Medium. https://medium.com/@yashschandra/anatomy-of-a-pem-file-727f1690df18
