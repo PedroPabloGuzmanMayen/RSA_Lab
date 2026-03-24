@@ -138,11 +138,81 @@ Esto ocurre debido a que el algoritmo OAEP tranforma el mensaje original introdu
 
 ## Ejercicio 3
 
+Se implementó el cifrado híbrido con AES y RSA en el archivo: [AES_cipher.py](src/AES_cipher.py)
 
 
+La función de cifrado recibe los bytes del documento a cifrar en bytes y la llave pública en formato *.pem* del cifrado RSA que queremos utilizar. Retorna el documento cifrado, la tag del cifrado AES, el nonce usado y la llave *AES* cifrada con  *RS*
 
 
+```python
+def encrypt_document(document: bytes, public_key: str) -> tuple[bytes, bytes, bytes, bytes]:
+    """
+    Cifra un documento usando AES
 
+    Args:
+        document (bytes): los bytes del documento que queremos cifrar
+        aes_key (bytes): La llave AES que vamos a usar para cifrar
+    Returns:
+        El documento cifrado con AES y la llave cifrada con RSA
+    
+    """
+    aes_key = secrets.token_bytes(256// 8)
+    cipher_aes = AES.new(aes_key, AES.MODE_GCM)
+    ciphertext, tag = cipher_aes.encrypt_and_digest(document)
+
+    return ciphertext, cipher_rsa(aes_key, public_key), cipher_aes.nonce, tag
+```
+
+
+```python
+def encrypt_document(document: bytes, public_key: str) -> tuple[bytes, bytes, bytes, bytes]:
+    """
+    Cifra un documento usando AES
+
+    Args:
+        document (bytes): los bytes del documento que queremos cifrar
+        aes_key (bytes): La llave AES que vamos a usar para cifrar
+    Returns:
+        El documento cifrado con AES y la llave cifrada con RSA
+    
+    """
+    aes_key = secrets.token_bytes(256// 8)
+    cipher_aes = AES.new(aes_key, AES.MODE_GCM)
+    ciphertext, tag = cipher_aes.encrypt_and_digest(document)
+
+    return ciphertext, cipher_rsa(aes_key, public_key), cipher_aes.nonce, tag
+```
+
+La función de descifrado recibe la llave privada en *.pem* y los outputs de la función de encriptado 
+
+```python
+def decrypt_document(cipher_document: bytes, 
+                     key_cipher: bytes, 
+                     private_key: str, 
+                     passphrase: str, 
+                     nonce: bytes,
+                     tag: bytes) -> bytes:
+    """
+    Descifra un documento usando una llave RSA y el algoritmo AES GCM
+
+    Args:
+        cipher_document (bytes): el documento cifrado en bytes
+        key_cipher (bytes): La llave AES cifrada en RSA
+        private_key (str): La llave privada para descifrar RSA
+        passphrase (str): passphrase de la llave privada
+        nonce (bytes): el nonce usado para cifrar en AES
+        tag(bytes): la tag generada al cifrar con AES el mensaje original
+
+    Returns:
+        El documento descifrado en bytes
+    """
+
+    print(f'Adentro, privada{private_key}')
+    decrypted_key = decipher_rsa(key_cipher, private_key, passphrase)
+    decipher_aes = AES.new(decrypted_key, AES.MODE_GCM, nonce=nonce)
+
+    return decipher_aes.decrypt_and_verify(cipher_document, tag)
+```
 
 ## Referencias
 
@@ -150,5 +220,4 @@ Esto ocurre debido a que el algoritmo OAEP tranforma el mensaje original introdu
 
 2. Wikipedia contributors. (2026, febrero 18). Optimal asymmetric encryption padding. Wikipedia, The Free Encyclopedia. https://en.wikipedia.org/w/index.php?title=Optimal_asymmetric_encryption_padding&oldid=1338977327
 
-3. 
 
