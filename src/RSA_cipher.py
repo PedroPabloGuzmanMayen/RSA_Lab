@@ -30,6 +30,7 @@ def decipher_rsa(ciphertext: bytes, private_key_pem: str, pwd: str) -> bytes:
     """
     key = RSA.importKey(open(private_key_pem).read(), passphrase = pwd if pwd != '' else None)
     cipher = PKCS1_OAEP.new(key)
+    
     return cipher.decrypt(ciphertext)
 
 if __name__ == '__main__':
