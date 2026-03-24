@@ -93,9 +93,62 @@ En las imágenes se puede ver el contenido de las llaves generadas en base 64, v
 
 ## Ejercicio 2
 
+Se implementaron las funciones de cifrado y descifrado con el algoritmo RSA-OAEP en el archivo: [RSA_cipher.py](src/RSA_cipher.py)
+
+Estas son las funciones desarrolladas:
+
+```python
+def cipher_rsa(message: bytes, public_key_pem: str) -> bytes:
+    """
+    Cifra un mensaje usando RSA
+
+    Args:
+        message (bytes): el mensaje a cifrar en bytes
+        public_key_pem (bytes): la llave pública en bytes
+
+    Returns:
+        bytes:el mensaje cifrado en bytes
+    """
+    key = RSA.importKey(open(public_key_pem).read())
+    cipher = PKCS1_OAEP.new(key)
+    return cipher.encrypt(message)
+
+def decipher_rsa(ciphertext: bytes, private_key_pem: str, pwd: str) -> bytes:
+    """
+    Descifra un mensaje usando RSA
+
+    Args:
+        ciphertext (bytes): El texto o mensaje que queremos descifrar en bytes
+        private_key_pem (bytes):la llave privada
+
+    Returns:
+        bytes: el mensaje descifrado en bytes
+    """
+    key = RSA.importKey(open(private_key_pem).read(), passphrase = pwd if pwd != '' else None)
+    cipher = PKCS1_OAEP.new(key)
+    return cipher.decrypt(ciphertext)
+```
+
+Al utilizar la función de cifrado para un mismo mensaje, vemos que se genera distintos outputs:
+
+![imagen 1](imgs/Encription.png)
+
+Esto ocurre debido a que el algoritmo OAEP tranforma el mensaje original introduciendo cierta aletoriedad, se usa un seed que sirve para enmascarar el mensaje con un XOR. Por esa razón, se producen resultados diferentes para un mismo mensaje.
+
+
+## Ejercicio 3
+
+
+
+
+
 
 
 ## Referencias
 
 1. Chandra, Y. S. (2023, agosto 26). Anatomy of a PEM file. Medium. https://medium.com/@yashschandra/anatomy-of-a-pem-file-727f1690df18
+
+2. Wikipedia contributors. (2026, febrero 18). Optimal asymmetric encryption padding. Wikipedia, The Free Encyclopedia. https://en.wikipedia.org/w/index.php?title=Optimal_asymmetric_encryption_padding&oldid=1338977327
+
+3. 
 
